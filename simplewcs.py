@@ -21,6 +21,7 @@ from qgis.core import QgsApplication, QgsMessageLog, QgsRasterLayer, QgsProject,
 from urllib.error import HTTPError, URLError
 from urllib.request import Request
 from urllib.parse import urlparse
+from datetime import date
 
 import os.path, urllib
 
@@ -209,6 +210,8 @@ class SimpleWCS:
 
         self.dlg.cbFormat.clear()
 
+        self.dlg.cbYear.clear()
+
         self.dlg.btnGetCoverage.setEnabled(False)
 
         self.dlg.lblExtent.clear()
@@ -243,6 +246,11 @@ class SimpleWCS:
         else:
             self.dlg.cbFormat.addItem('no tiff available')
             self.dlg.cbFormat.setEnabled(False)
+
+        self.dlg.cbYear.addItem(' ')
+        yearThis = date.today().year
+        for i in range(yearThis,1900, -1):
+            self.dlg.cbYear.addItem(str(i))
 
         self.setExtentLabel()
 
@@ -324,6 +332,8 @@ class SimpleWCS:
         covId = self.dlg.cbCoverage.currentText()
         coverage = self.describeCoverage(covId)
 
+        year = self.dlg.cbYear.currentText()
+
         #range = coverage.getRange()
         #self.logInfoMessage(str(range))
 
@@ -335,12 +345,16 @@ class SimpleWCS:
         coordinates = self.roundExtent(extent)
         subset0 = label0 + '(' + str(coordinates[0]) + ',' + str(coordinates[2]) + ')'
         subset1 = label1 + '(' + str(coordinates[1]) + ',' + str(coordinates[3]) + ')'
+        subset2 = 'time("'+year+'-12-31T00:00:00.000Z")'
 
         outputcrs = self.dlg.cbCRS.currentText()
         mapcrs = self.dlg.cbCRS.currentText()
         format = self.dlg.cbFormat.currentText()
 
         params = [('REQUEST', 'GetCoverage'), ('SERVICE', 'WCS'), ('VERSION', version), ('COVERAGEID', covId), ('OUTPUTCRS', outputcrs), ('SUBSETTINGCRS', mapcrs), ('FORMAT', format), ('SUBSET', subset0), ('SUBSET', subset1)]
+
+        if year != ' ':
+            params.append(('SUBSET', subset2))
 
         querystring = urllib.parse.urlencode(params)
 
