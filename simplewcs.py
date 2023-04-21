@@ -171,6 +171,9 @@ class SimpleWCS:
         version = self.dlg.cbVersion.currentText()
 
         params = {"REQUEST": "GetCapabilities", "SERVICE": "WCS", "Version": version}
+        apiKey = self.dlg.leApiKey.text()
+        if len(apiKey):
+            params["api-key"] = apiKey
         querystring = urllib.parse.urlencode(params)
         url = self.checkUrlSyntax(baseUrl)
         xmlResponse = self.requestXML(url + querystring)

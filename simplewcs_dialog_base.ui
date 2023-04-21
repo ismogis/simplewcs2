@@ -142,7 +142,7 @@
       <string>Tip: Requests and error messages can be found in qgis log</string>
      </property>
     </widget>
-    <widget class="QLabel" name="lblVersionDesc_4">
+    <widget class="QLabel" name="lblApiKey">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -161,7 +161,7 @@
       <string>Set API Key</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="leUrl_2">
+    <widget class="QLineEdit" name="leApiKey">
      <property name="geometry">
       <rect>
        <x>10</x>
