@@ -301,6 +301,9 @@ class SimpleWCS:
 
     def describeCoverage(self, covId):
         params = {"REQUEST": "DescribeCoverage", "SERVICE": "WCS", "VERSION": "2.0.1", "COVERAGEID": covId}
+        apiKey = self.dlg.leApiKey.text()
+        if len(apiKey):
+            params["api-key"] = apiKey
         querystring = urllib.parse.urlencode(params)
 
         describeCoverageUrl = self.wcs.getDescribeCoverageUrl()
@@ -358,6 +361,10 @@ class SimpleWCS:
 
         if year != ' ':
             params.append(('SUBSET', subset2))
+
+        apiKey = self.dlg.leApiKey.text()
+        if len(apiKey):
+            params.append(('api-key', apiKey))
 
         querystring = urllib.parse.urlencode(params)
 
